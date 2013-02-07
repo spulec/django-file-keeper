@@ -1,11 +1,11 @@
-## Django-File-Keeper - file storage for management command in django
+## Django-File-Keeper - file storage for management commands in django
 [![Build Status](https://secure.travis-ci.org/spulec/django-file-keeper.png)](http://travis-ci.org/spulec/Django-File-Keeper)
 
-Do you ever commit large data fixtures to your git repo just so that you can run a once-off management command with that data? Not anymore.
+Do you ever commit large data fixtures to your git repo just so that you can run a one-off management command with that data? Not anymore.
 
 Django-File-Keeper makes it easy to seamlessly have those files uploaded to S3 during development and downloaded from S3 on production meaning that you never need to commit those fixtures again.
 
-For example, imagine the marketing department hands you a csv file of new users (new_users.csv) that need to be added into our system.
+For example, imagine the marketing department hands you a csv file of new users (new_users.csv) that need to be added into our production system.
 
 First, we upload the file to s3.
 
@@ -47,7 +47,7 @@ class Command(BaseCommand):
             print line
 ```
 
-`keeper_file.csv` returns a python csv reader object.
+`keeper_file` returns a normal python file.
 
 ## JSON:
 
@@ -71,7 +71,7 @@ class Command(BaseCommand):
 $ pip install django-file-keeper
 ```
 
-In your django settings file, add the following variables so that file-keeper know which s3 bucket to use and what keys it should use to access it.
+In your django settings file, set the following variables so that file-keeper know which s3 bucket to use and what keys it should use to access it.
 
 *   FILE_KEEPER_ACCESS_KEY
 *   FILE_KEEPER_SECRET_KEY
