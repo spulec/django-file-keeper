@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
-from optparse import make_option
-
-import boto
-from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from keeper.core import set_key

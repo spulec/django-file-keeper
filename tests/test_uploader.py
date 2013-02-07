@@ -10,28 +10,6 @@ import sure
 
 from django.core import management
 
-from keeper.core import use_file
-
-
-'''
-Traceback (most recent call last):
-  File "./manage.py", line 34, in <module>
-    execute_from_command_line(sys.argv)
-  File "/usr/local/lib/python2.7/site-packages/django/core/management/__init__.py", line 443, in execute_from_command_line
-    utility.execute()
-  File "/usr/local/lib/python2.7/site-packages/django/core/management/__init__.py", line 382, in execute
-    self.fetch_command(subcommand).run_from_argv(self.argv)
-  File "/usr/local/lib/python2.7/site-packages/django/core/management/base.py", line 196, in run_from_argv
-    self.execute(*args, **options.__dict__)
-  File "/usr/local/lib/python2.7/site-packages/django/core/management/base.py", line 232, in execute
-    output = self.handle(*args, **options)
-  File "/Users/spulec/Development/yipit-env/lib/python2.7/site-packages/keeper/management/commands/upload_data_file.py", line 18, in handle
-    set_key(filename)
-  File "/Users/spulec/Development/yipit-env/lib/python2.7/site-packages/keeper/core.py", line 41, in set_key
-    key.set_contents_from_filename(filename)
-AttributeError: 'NoneType' object has no attribute 'set_contents_from_filename'
-'''
-
 # @patch("keeper.core.set_key")
 # def test_uploader(set_key):
 #     test_filename = 'foobar.csv'

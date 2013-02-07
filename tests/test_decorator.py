@@ -1,4 +1,3 @@
-import boto
 from mock import mock_open, patch
 import sure
 
