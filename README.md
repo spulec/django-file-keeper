@@ -1,4 +1,4 @@
-## keeper - file storage for management command in django
+## Django-File-Keeper - file storage for management command in django
 
 ```python
 from django.core.management.base import BaseCommand
@@ -55,5 +55,5 @@ class Command(BaseCommand):
 # Installing
 
 ```bash
-$ [sudo] pip install django-file-keeper
+$ pip install django-file-keeper
 ```
