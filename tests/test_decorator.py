@@ -34,6 +34,66 @@ def test_basic_decorator(get_bucket):
 
 
 @patch("keeper.core.get_bucket")
+def test_result_csv(get_bucket):
+    class FakeKey(object):
+        def __init__(self, keyname):
+            self.keyname = keyname
+
+        def get_contents_as_string(self):
+            return "test1,test2\nblue,green\n"
+
+    fake_key = FakeKey('other.csv')
+
+    class FakeBucket(object):
+        vals = {'foobar.csv': fake_key}
+        def get_key(self, keyname):
+            return self.vals.get(keyname)
+
+    fake_bucket = FakeBucket()
+    get_bucket.return_value = fake_bucket
+
+    @use_file('foobar.csv')
+    def a_handle(keeper_file, *args, **options):
+        lines = []
+        for line in keeper_file.csv:
+            lines.append(tuple(line))
+        return lines
+
+    a_handle.when.called_with().should.return_value([("test1", "test2"), ("blue", "green")])
+
+
+@patch("keeper.core.get_bucket")
+def test_result_json(get_bucket):
+    class FakeKey(object):
+        def __init__(self, keyname):
+            self.keyname = keyname
+
+        def get_contents_as_string(self):
+            return '{"test1": "test2",\n"blue":{\n"a":"green"}}'
+
+    fake_key = FakeKey('other.json')
+
+    class FakeBucket(object):
+        vals = {'foobar.json': fake_key}
+        def get_key(self, keyname):
+            return self.vals.get(keyname)
+
+    fake_bucket = FakeBucket()
+    get_bucket.return_value = fake_bucket
+
+    @use_file('foobar.json')
+    def a_handle(keeper_file, *args, **options):
+        return keeper_file.json
+
+    a_handle.when.called_with().should.return_value({
+        'test1': 'test2',
+        'blue': {
+            'a': 'green'
+        }
+    })
+
+
+@patch("keeper.core.get_bucket")
 def test_key_doesnt_exist(get_bucket):
     get_bucket.return_value.get_key.return_value = None
 

@@ -1,7 +1,35 @@
+import csv
 import functools
+import json
+from StringIO import StringIO
 
 import boto
 from django.conf import settings
+
+
+class KeeperResult(object):
+    def __init__(self, contents):
+        self.contents = contents
+
+    def __iter__(self):
+        for line in self.contents.split('\n'):
+            yield line
+
+    def __unicode__(self):
+        result_string = u"KeeperResult: {}"
+        if len(self.contents) > 50:
+            result_string = u"KeeperResult: {}..."
+
+        return result_string.format(self.contents[:50])
+
+    @property
+    def csv(self):
+        csv_reader = csv.reader(StringIO(self.contents))
+        return csv_reader
+
+    @property
+    def json(self):
+        return json.loads(self.contents)
 
 
 class Keeper(object):
@@ -27,7 +55,7 @@ class Keeper(object):
             raise IOError(
                 'The file {} cannot be found on S3.'.format(self.filename))
 
-        return key.get_contents_as_string().split('\n')
+        return KeeperResult(key.get_contents_as_string())
 
 
 def use_file(filename):
@@ -51,7 +79,7 @@ def set_key(filename):
         prompt = "The file {} already exists on S3. Would you like to overwrite it[Y/N]".format(filename)
         response = get_input(prompt)
         if response != "Y":
-            print("Bot overwriting {}".format(filename))
+            print("Not overwriting {}".format(filename))
             return
 
     key = bucket.new_key(filename)
