@@ -30,9 +30,9 @@ class Command(BaseCommand):
 
 That's it! When this runs on production, it will automatically grab the file from S3 and pass it into the management command as `keeper_file`.
 
-# More Advanced
+# Other Formats
 
-## CSV:
+## Plain-text:
 
 ```python
 from django.core.management.base import BaseCommand
@@ -40,9 +40,9 @@ from keeper import use_file
 
 class Command(BaseCommand):
 
-    @use_file('foobar.csv')
+    @use_file('foobar.txt')
     def handle(self, keeper_file, *args, **options):
-        for line in keeper_file.csv:
+        for line in keeper_file:
             print line
 ```
 
