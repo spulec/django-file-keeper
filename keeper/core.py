@@ -21,6 +21,7 @@ class Keeper(object):
 
     def get_file(self):
         bucket = get_bucket()
+        key = bucket.get_key(self.filename)
         return bucket.get_contents_as_string(self.filename)
 
 
@@ -36,4 +37,5 @@ def get_bucket():
 
 def set_key(filename):
     bucket = get_bucket()
-    bucket.set_contents_from_filename(filename)
+    key = bucket.get_key(filename)
+    key.set_contents_from_filename(filename)
