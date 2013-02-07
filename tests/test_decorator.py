@@ -1,5 +1,5 @@
 import boto
-from mock import patch
+from mock import mock_open, patch
 import sure
 
 from keeper.core import get_bucket, use_file
@@ -110,3 +110,18 @@ def test_key_doesnt_exist(get_bucket):
 def test_get_bucket(connect_s3, settings):
     connect_s3.return_value.get_bucket.return_value = "foobar"
     get_bucket.when.called_with().should.return_value("foobar")
+
+
+@patch('keeper.core.open', mock_open(read_data='local contents\nand some more'), create=True)
+@patch("keeper.core.get_bucket")
+def test_local_result(get_bucket):
+    get_bucket.return_value.get_key.return_value = None
+
+    @use_file('foobar.csv')
+    def a_handle(keeper_file, *args, **options):
+        lines = []
+        for line in keeper_file:
+            lines.append(line)
+        return lines
+
+    a_handle.when.called_with(local=True).should.return_value(['local contents', 'and some more'])
