@@ -22,6 +22,10 @@ class Keeper(object):
     def get_file(self):
         bucket = get_bucket()
         key = bucket.get_key(self.filename)
+        if key is None:
+            raise IOError(
+                'The file {} cannot be found on S3.'.format(self.filename))
+
         return key.get_contents_as_string(self.filename)
 
 
@@ -35,7 +39,19 @@ def get_bucket():
     bucket = conn.get_bucket(settings.FILE_KEEPER_BUCKET)
     return bucket
 
+
+def get_input(prompt):
+    return raw_input(prompt)
+
 def set_key(filename):
     bucket = get_bucket()
     key = bucket.get_key(filename)
+    if key is not None:
+        prompt = "The file {} already exists on S3. Would you like to overwrite it[Y/N]".format(filename)
+        response = get_input(prompt)
+        if response != "Y":
+            print("Bot overwriting {}".format(filename))
+            return
+
+    key = bucket.new_key(filename)
     key.set_contents_from_filename(filename)
