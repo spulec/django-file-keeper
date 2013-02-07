@@ -22,7 +22,7 @@ class Keeper(object):
     def get_file(self):
         bucket = get_bucket()
         key = bucket.get_key(self.filename)
-        return bucket.get_contents_as_string(self.filename)
+        return key.get_contents_as_string(self.filename)
 
 
 def use_file(filename):
