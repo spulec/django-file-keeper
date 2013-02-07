@@ -26,7 +26,7 @@ class Keeper(object):
             raise IOError(
                 'The file {} cannot be found on S3.'.format(self.filename))
 
-        return key.get_contents_as_string(self.filename)
+        return key.get_contents_as_string()
 
 
 def use_file(filename):
