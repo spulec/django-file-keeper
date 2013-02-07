@@ -4,14 +4,29 @@ import sure
 
 from keeper.core import get_bucket, use_file
 
-@patch("keeper.core.Keeper.get_file")
-def test_basic_decorator(get_file):
-    get_file.return_value = ["test1", "test2"]
+@patch("keeper.core.get_bucket")
+def test_basic_decorator(get_bucket):
+    class FakeKey(object):
+        def __init__(self, keyname):
+            self.keyname = keyname
+
+        def get_contents_as_string(self):
+            return "test1\ntest2"
+
+    fake_key = FakeKey('other.csv')
+
+    class FakeBucket(object):
+        vals = {'foobar.csv': fake_key}
+        def get_key(self, keyname):
+            return self.vals.get(keyname)
+
+    fake_bucket = FakeBucket()
+    get_bucket.return_value = fake_bucket
 
     @use_file('foobar.csv')
-    def a_handle(the_file, *args, **options):
+    def a_handle(keeper_file, *args, **options):
         lines = []
-        for line in the_file:
+        for line in keeper_file:
             lines.append(line)
         return lines
 
@@ -23,7 +38,7 @@ def test_key_doesnt_exist(get_bucket):
     get_bucket.return_value.get_key.return_value = None
 
     @use_file('foobar.csv')
-    def a_handle(the_file, *args, **options):
+    def a_handle(keeper_file, *args, **options):
         pass
 
     a_handle.when.called_with().should.throw(IOError,

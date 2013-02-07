@@ -14,6 +14,7 @@ class Keeper(object):
     def decorate_callable(self, func):
         def wrapper(*args, **kwargs):
             the_file = self.get_file()
+            # TODO do we need to do keeper_file=?
             result = func(keeper_file=the_file, *args, **kwargs)
             return result
         functools.update_wrapper(wrapper, func)
@@ -26,7 +27,7 @@ class Keeper(object):
             raise IOError(
                 'The file {} cannot be found on S3.'.format(self.filename))
 
-        return key.get_contents_as_string()
+        return key.get_contents_as_string().split('\n')
 
 
 def use_file(filename):
