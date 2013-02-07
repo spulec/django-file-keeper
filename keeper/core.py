@@ -14,7 +14,7 @@ class Keeper(object):
     def decorate_callable(self, func):
         def wrapper(*args, **kwargs):
             the_file = self.get_file()
-            result = func(the_file, *args, **kwargs)
+            result = func(keeper_file=the_file, *args, **kwargs)
             return result
         functools.update_wrapper(wrapper, func)
         return wrapper
