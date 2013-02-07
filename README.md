@@ -1,4 +1,5 @@
 ## Django-File-Keeper - file storage for management command in django
+[![Build Status](https://secure.travis-ci.org/spulec/django-file-keeper.png)](http://travis-ci.org/spulec/Django-File-Keeper)
 
 Do you ever commit large data fixtures to your git repo just so that you can run a once-off management command with that data? Not anymore.
 
